@@ -29,8 +29,9 @@ android5 版本的 bs 需要下載最新版的 BS 後,使用多開管理器新�
 
 ## 使用方法
 
-1.先去安裝 python,這部分很簡單請自行 Google,或是等我哪天無聊到把這個程式打包成 exe 檔 2.安裝完 python 後,把這個專案整個下載,然後點擊資料夾內的"setup.bat![setup](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/setup.png)",等他自動安裝完後會自我刪除
-等安裝完後點擊"start.bat![start](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/start.png)執行
+1.先去安裝 python,這部分很簡單請自行 Google,或是等我哪天無聊到把這個程式打包成 exe 檔
+
+2.安裝完 python 後,把這個專案整個下載,然後點擊資料夾內的"setup.bat![setup](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/setup.png)",等他自動安裝完後會自我刪除,等安裝完後點擊"start.bat![start](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/start.png)執行
 
 |--------重要部分--------|
 
