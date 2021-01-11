@@ -1,0 +1,5 @@
+.vscode/
+core/__pycache__
+log.txt
+screenshots.png
+tempCodeRunnerFile.py
