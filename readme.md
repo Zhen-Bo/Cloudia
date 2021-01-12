@@ -41,11 +41,15 @@ android5 版本的 bs 需要下載最新版的 BS 後,使用多開管理器新�
 
 |-----------------------------|
 
-### 3.開啟 Cloudia.exe,如果發現閃退屬於正常現象,因為 adb 還沒有完全啟動,如果閃退的話等個 1~3 秒在重新開啟一次
+3.進道剛剛解壓縮的資料夾並在路徑列輸入 cmd 後按 enter
 
-### 通常要開啟 3 次左右才會成功
+![](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/start1.png)
 
-PS:如果還是不行,打開 CMD,切換到該資料夾,然後輸入 Cloudia.exe,查看 traceback 後截圖並發出來
+4.然後在跳出來的介面上輸入"Cloudia.exe"並按 enter 執行
+
+![](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/start2.png)
+
+5.如果有問題請多試幾次,沒辦法解決的話請把帶有錯誤訊息的截圖發出來,不然我不會觀落陰也不會通靈
 
 ---
 
