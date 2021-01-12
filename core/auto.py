@@ -4,8 +4,7 @@ import time
 
 
 class auto():
-    def __init__(self, debug=False):
-        util.debug = debug
+    def __init__(self):
         self.log = open('log.txt', 'a')
         self.line = "//================================================\n"
         util.get_width_muti()
@@ -13,19 +12,21 @@ class auto():
         self.space_flag = False
         self.sand_flag = False
         self.times = 0
+        self.path = os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))) + "/images"
 
     def log_info(self, str):
         self.log.write(str)
         print(str, end='')
 
     def bot_start(self):
-        os.system('cls')
+        # os.system('cls')
         self.log_info(self.line)
         self.log_info("開始運行\n")
         self.log_info(self.line)
         POG = []
         again = False
-        again = util.standby("core/images/again.jpg")
+        again = util.standby("{0}/again.jpg".format(self.path), self.path)
         util.tap(again[0], raw=True)
         time.sleep(0.5)
         while len(POG) != 3:
@@ -34,7 +35,7 @@ class auto():
             again = False
             while not again:
                 again = util.standby(
-                    "core/images/again.jpg")
+                    "{0}/again.jpg".format(self.path), self.path)
                 if not again:
                     util.tap((960, 70))
             POG = again[1]
