@@ -11,7 +11,7 @@ class adbKit(object):
         os.system("{0}/adb/adb.exe start-server".format(self.path))
         print("請稍候5秒")
         time.sleep(5)
-        os.system("{0}/adb/adb.exe start-server".format(self.path))
+        os.system("{0}/adb/adb.exe decives".format(self.path))
         self.capmuti = float(1)
 
     def get_width_muti(self):
