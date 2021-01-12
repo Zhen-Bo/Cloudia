@@ -27,8 +27,9 @@ class adbKit(object):
         # image_bytes = pipe.stdout.read()
         # image_bytes = image_bytes.replace(b'\r\r\n', b'\n')
         # time.sleep(0.5)
-        os.system('{0}/adb/adb.exe shell screencap -p /sdcard/screencap.png')
-        os.system('{0}/adb/adb.exe pull /sdcard/screencap.png')
+        os.system(
+            '{0}/adb/adb.exe shell screencap -p /sdcard/screencap.png'.format(self.path))
+        os.system('{0}/adb/adb.exe pull /sdcard/screencap.png'.format(self.path))
         image = cv2.imread(self.path + "/screencap.png")
         try:
             if image.shape[0] != 1920 and image.shape[1] != 1080 and not raw:
@@ -51,4 +52,4 @@ class adbKit(object):
             Px = str(int(pointx)*self.capmuti)
             Py = str(int(pointy)*self.capmuti)
         os.system(
-            '{0}/adb/adb.exe shell input tap '.format(self.path) + ' ' + Px + ' ' + Py)
+            "{0}/adb/adb.exe shell input tap ".format(self.path) + ' ' + Px + ' ' + Py)

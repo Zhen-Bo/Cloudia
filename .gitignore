@@ -3,6 +3,8 @@ core/__pycache__
 log.txt
 screenshots.png
 tempCodeRunnerFile.py
-dict/
 build/
 screenshots.png
+dist/
+__pycache__/app.cpython-37.pyc
+app.spec
