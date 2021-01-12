@@ -9,6 +9,8 @@ class adbKit(object):
     def __init__(self) -> None:
         self.path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         os.system("{0}/adb/adb.exe start-server".format(self.path))
+        print("請稍候5秒")
+        time.sleep(5)
         os.system("{0}/adb/adb.exe start-server".format(self.path))
         self.capmuti = float(1)
 
