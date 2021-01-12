@@ -20,14 +20,15 @@ class adbKit(object):
             print("無法取得解析度")
 
     def screenshots(self, raw=False):
-        pipe = subprocess.Popen("{0}/adb/adb.exe shell screencap -p".format(self.path),
-                                stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-        image_bytes = pipe.stdout.read()
-        image_bytes = image_bytes.replace(b'\r\r\n', b'\n')
-        time.sleep(0.5)
+        # pipe = subprocess.Popen("{0}/adb/adb.exe shell screencap -p".format(self.path),
+        #                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+        # image_bytes = pipe.stdout.read()
+        # image_bytes = image_bytes.replace(b'\r\r\n', b'\n')
+        # time.sleep(0.5)
+        os.system('{0}/adb/adb.exe shell screencap -p /sdcard/screencap.png')
+        os.system('{0}/adb/adb.exe pull /sdcard/screencap.png')
+        image = cv2.imread(self.path + "/screencap.png")
         try:
-            image = cv2.imdecode(np.frombuffer(
-                image_bytes, dtype='uint8'), cv2.IMREAD_COLOR)
             if image.shape[0] != 1920 and image.shape[1] != 1080 and not raw:
                 image = self.reimage(image)
             return image

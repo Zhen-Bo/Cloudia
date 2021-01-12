@@ -41,8 +41,6 @@ class auto():
                     "{0}/again.jpg".format(self.path), self.path)
                 if not again:
                     util.tap((960, 70))
-                    if len(POG) == 3:
-                        break
             POG = again[1]
             if self.times == 0:
                 self.times += 1
@@ -60,9 +58,9 @@ class auto():
                 self.log_info("耗時 {0} 秒\n".format(cost_time))
                 self.log_info(self.line)
                 self.times += 1
-                time.sleep(1)
                 if len(POG) != 3:
                     util.tap(again[0], raw=True)
+                    time.sleep(1)
                 elif len(POG) == 3:
                     print("執行結束,總共執行 {0} 次".format(self.times))
                     enter = input("請輸入enter繼續")
