@@ -1,6 +1,6 @@
 import os
-from core import util
 import time
+from core import util
 
 
 class auto():

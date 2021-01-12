@@ -8,10 +8,11 @@ from cv2 import cv2
 class adbKit(object):
     def __init__(self) -> None:
         self.path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        os.system("{0}/adb/adb.exe kill-server".format(self.path))
         os.system("{0}/adb/adb.exe start-server".format(self.path))
-        print("請稍候5秒")
-        time.sleep(5)
-        os.system("{0}/adb/adb.exe decives".format(self.path))
+        print("等待20秒讓ADB載入模擬器")
+        time.sleep(20)
+        os.system("{0}/adb/adb.exe devices".format(self.path))
         self.capmuti = float(1)
 
     def get_width_muti(self):
@@ -22,21 +23,16 @@ class adbKit(object):
             print("無法取得解析度")
 
     def screenshots(self, raw=False):
-        # pipe = subprocess.Popen("{0}/adb/adb.exe shell screencap -p".format(self.path),
-        #                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-        # image_bytes = pipe.stdout.read()
-        # image_bytes = image_bytes.replace(b'\r\r\n', b'\n')
-        # time.sleep(0.5)
-        os.system(
-            '{0}/adb/adb.exe shell screencap -p /sdcard/screencap.png'.format(self.path))
-        os.system('{0}/adb/adb.exe pull /sdcard/screencap.png'.format(self.path))
-        image = cv2.imread(self.path + "/screencap.png")
-        try:
-            if image.shape[0] != 1920 and image.shape[1] != 1080 and not raw:
-                image = self.reimage(image)
-            return image
-        except:
-            time.sleep(1)
+        pipe = subprocess.Popen("{0}/adb/adb.exe shell screencap -p".format(self.path),
+                                stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+        image_bytes = pipe.stdout.read()
+        image_bytes = image_bytes.replace(b'\r\r\n', b'\n')
+        time.sleep(0.5)
+        image = cv2.imdecode(np.frombuffer(
+            image_bytes, dtype='uint8'), cv2.IMREAD_COLOR)
+        if image.shape[0] != 1920 and image.shape[1] != 1080 and not raw:
+            image = self.reimage(image)
+        return image
 
     # DONE 多解析度支援
 
