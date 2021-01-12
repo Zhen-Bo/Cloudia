@@ -30,7 +30,7 @@ class auto():
         try:
             util.tap(again[0], raw=True)
         except:
-            raise Exception("沒有偵測到\"再抽一次\"\n退出程式")
+            raise Exception("沒有偵測到\"再抽一次\",或是解析度不是9x16的解析度\n退出程式")
         time.sleep(0.5)
         while len(POG) != 3:
             t_start = time.time()
