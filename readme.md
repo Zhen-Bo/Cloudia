@@ -39,6 +39,8 @@ android5 版本的 bs 需要下載最新版的 BS 後,使用多開管理器新�
 
 是以"![again_btn](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/again.jpg)"為判斷基準
 
+補充:用夜神模擬器的使用者,你們好像要找到夜神專用的 nox_adb.exe,找到後複製一份出來重新命名成 adb.exe,然後覆蓋程式目錄下的 adb 資料夾中的 adb.exe
+
 |-----------------------------|
 
 3.進道剛剛解壓縮的資料夾並在路徑列輸入 cmd 後按 enter
