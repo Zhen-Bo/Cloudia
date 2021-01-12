@@ -7,11 +7,17 @@ from cv2 import cv2
 
 class adbKit(object):
     def __init__(self) -> None:
-        self.capmuti = float(1)
         self.path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         os.system("{0}/adb/adb.exe start-server".format(self.path))
-        print("請稍後10秒確保adb開啟")
-        time.sleep(10)
+        os.system("{0}/adb/adb.exe start-server".format(self.path))
+        self.capmuti = float(1)
+
+    def get_width_muti(self):
+        sample = self.screenshots(raw=True)
+        try:
+            self.capmuti = sample.shape[0] / 1920
+        except:
+            print("無法取得解析度")
 
     def screenshots(self, raw=False):
         pipe = subprocess.Popen("{0}/adb/adb.exe shell screencap -p".format(self.path),
@@ -19,13 +25,17 @@ class adbKit(object):
         image_bytes = pipe.stdout.read()
         image_bytes = image_bytes.replace(b'\r\r\n', b'\n')
         time.sleep(0.5)
-        image = cv2.imdecode(np.frombuffer(
-            image_bytes, dtype='uint8'), cv2.IMREAD_COLOR)
-        if image.shape[0] != 1920 and image.shape[1] != 1080 and not raw:
-            image = self.reimage(image)
-        return image
+        try:
+            image = cv2.imdecode(np.frombuffer(
+                image_bytes, dtype='uint8'), cv2.IMREAD_COLOR)
+            if image.shape[0] != 1920 and image.shape[1] != 1080 and not raw:
+                image = self.reimage(image)
+            return image
+        except:
+            time.sleep(1)
 
     # DONE 多解析度支援
+
     def reimage(self, images):
         images = cv2.resize(images, (1080, 1920))
         return images

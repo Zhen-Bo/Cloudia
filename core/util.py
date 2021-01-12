@@ -27,17 +27,15 @@ def compare(img_path, target_img):
     return gatcha
 
 
-def get_width_muti():
-    sample = adbkit.screenshots(raw=True)
-    adbkit.capmuti = sample.shape[0] / 1920
-
-
 def standby(template, img_path, acc=0.85):
     target_img = adbkit.screenshots()
     find_img = cv2.imread(str(template))
     # 模板匹配
-    result = cv2.matchTemplate(target_img, find_img, cv2.TM_CCOEFF_NORMED)
-    reslist = cv2.minMaxLoc(result)
+    try:
+        result = cv2.matchTemplate(target_img, find_img, cv2.TM_CCOEFF_NORMED)
+        reslist = cv2.minMaxLoc(result)
+    except:
+        raise Exception("ADB截圖失敗,請嘗試重開模擬器")
     if reslist[1] > acc:
         pos = [reslist[3][0], reslist[3][1]]
         pos = [x*adbkit.capmuti for x in pos]

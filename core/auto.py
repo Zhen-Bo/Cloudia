@@ -7,7 +7,6 @@ class auto():
     def __init__(self):
         self.log = open('log.txt', 'a')
         self.line = "//================================================\n"
-        util.get_width_muti()
         self.ship_flag = False
         self.space_flag = False
         self.sand_flag = False
@@ -21,13 +20,17 @@ class auto():
 
     def bot_start(self):
         # os.system('cls')
+        util.adbkit.get_width_muti()
         self.log_info(self.line)
         self.log_info("開始運行\n")
         self.log_info(self.line)
         POG = []
         again = False
         again = util.standby("{0}/again.jpg".format(self.path), self.path)
-        util.tap(again[0], raw=True)
+        try:
+            util.tap(again[0], raw=True)
+        except:
+            raise Exception("沒有偵測到\"再抽一次\"\n退出程式")
         time.sleep(0.5)
         while len(POG) != 3:
             t_start = time.time()
@@ -38,6 +41,8 @@ class auto():
                     "{0}/again.jpg".format(self.path), self.path)
                 if not again:
                     util.tap((960, 70))
+                    if len(POG) == 3:
+                        break
             POG = again[1]
             if self.times == 0:
                 self.times += 1
@@ -56,5 +61,9 @@ class auto():
                 self.log_info(self.line)
                 self.times += 1
                 time.sleep(1)
-                util.tap(again[0], raw=True)
-        print("執行結束,總共執行 {0} 次".format(self.times))
+                if len(POG) != 3:
+                    util.tap(again[0], raw=True)
+                elif len(POG) == 3:
+                    print("執行結束,總共執行 {0} 次".format(self.times))
+                    enter = input("請輸入enter繼續")
+                    break
