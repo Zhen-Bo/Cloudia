@@ -20,7 +20,10 @@ class auto():
 
     def bot_start(self):
         # os.system('cls')
-        util.adbkit.get_width_muti()
+        try:
+            util.adbkit.get_width_muti()
+        except:
+            raise Exception("請確認模擬器是否為android5版本")
         self.log_info(self.line)
         self.log_info("開始運行\n")
         self.log_info(self.line)
@@ -55,9 +58,12 @@ class auto():
                     self.log_info('命中數量: 0\n')
                 t_end = time.time()
                 cost_time = round(t_end-t_start, 2)
-                self.log_info("耗時 {0} 秒\n".format(cost_time))
-                self.log_info(self.line)
-                self.times += 1
+                if cost_time > 3:
+                    self.log_info("耗時 {0} 秒\n".format(cost_time))
+                    self.log_info(self.line)
+                    self.times += 1
+                else:
+                    continue
                 if len(POG) != 3:
                     util.tap(again[0], raw=True)
                     time.sleep(1)

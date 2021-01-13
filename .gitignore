@@ -8,3 +8,6 @@ screenshots.png
 dist/
 __pycache__/app.cpython-37.pyc
 app.spec
+*.spec
+test.py
+*.pyc
