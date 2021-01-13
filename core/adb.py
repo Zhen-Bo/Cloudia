@@ -11,7 +11,7 @@ class adbKit(object):
         os.system("{0}/adb/adb.exe kill-server".format(self.path))
         os.system("{0}/adb/adb.exe start-server".format(self.path))
         print("等待10秒讓ADB載入模擬器")
-        for i in range(1):
+        for i in range(11):
             print(10-i, " ", end='\r')
             time.sleep(1)
         print("    ")
@@ -19,14 +19,17 @@ class adbKit(object):
         self.capmuti = float(1)
 
     def debug_get(self):
+        t1 = time.time()
         pipe = subprocess.Popen("{0}/adb/adb.exe shell screencap -p".format(self.path),
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         image_bytes = pipe.stdout.read()
         print(image_bytes[0:10])
-        image_bytes = image_bytes.replace(b'\r\r\n', b'\n')
+        image_bytes = image_bytes.replace(b'\r\n', b'\n')
         print(image_bytes[0:10])
         image = cv2.imdecode(np.frombuffer(
             image_bytes, dtype='uint8'), cv2.IMREAD_COLOR)
+        t2 = time.time()
+        print(t2-t1)
         try:
             if int(image.shape[0]) % 16 != 0 or int(image.shape[1] % 9) != 0:
                 print("我草尼碼,我不是叫你看readme了???,眼瞎是不是,你模擬器解析度不是9:16")
