@@ -11,14 +11,14 @@ class adbKit(object):
         os.system("{0}/adb/adb.exe kill-server".format(self.path))
         os.system("{0}/adb/adb.exe start-server".format(self.path))
         print("等待10秒讓ADB載入模擬器")
-        for i in range(11):
+        for i in range(1):
             print(10-i, " ", end='\r')
             time.sleep(1)
         print("    ")
         os.system("{0}/adb/adb.exe devices".format(self.path))
         self.capmuti = float(1)
 
-    def debug_get_write(self):
+    def debug_get(self):
         pipe = subprocess.Popen("{0}/adb/adb.exe shell screencap -p".format(self.path),
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         image_bytes = pipe.stdout.read()
@@ -27,12 +27,18 @@ class adbKit(object):
         print(image_bytes[0:10])
         image = cv2.imdecode(np.frombuffer(
             image_bytes, dtype='uint8'), cv2.IMREAD_COLOR)
-        image = cv2.imwrite("screencap.png", image)
-        raw = input("按Enter鍵繼續debug")
-
-    def debug_read(self):
-        image = cv2.imread("screencap.png")
-        print(image.shape)
+        try:
+            if int(image.shape[0]) % 16 != 0 or int(image.shape[1] % 9) != 0:
+                print("我草尼碼,我不是叫你看readme了???,眼瞎是不是,你模擬器解析度不是9:16")
+                print("還是說你在拉小提琴頭歪一邊以為16:9是9:16????")
+                print("你螢幕解析度是{0} x {1}".format(
+                    int(image.shape[1] % 9), int(image.shape[0])))
+            elif image.shape[0] != 1920 and image.shape[1] != 1080:
+                print("模擬器解析度原圖為: {0} x {1}".format(
+                    image.shape[1], image.shape[0]))
+                image = self.reimage(image)
+        except:
+            print("你模擬器截取出來的圖片爆炸了,有兩個建議選項,一個重灌電腦一個重灌模擬器一個想辦法自己解決")
         raw = input("按Enter鍵關閉視窗")
 
     def get_width_muti(self):

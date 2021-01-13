@@ -11,3 +11,4 @@ app.spec
 *.spec
 test.py
 *.pyc
+publish.py
