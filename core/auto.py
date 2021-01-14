@@ -61,12 +61,12 @@ class auto():
                 if cost_time > 3:
                     self.log_info("耗時 {0} 秒\n".format(cost_time))
                     self.log_info(self.line)
-                    self.times += 1
                 else:
                     continue
                 if len(POG) != 3:
                     util.tap(again[0], raw=True)
                     time.sleep(1)
+                    self.times += 1
                 elif len(POG) == 3:
                     print("執行結束,總共執行 {0} 次".format(self.times))
                     enter = input("請輸入enter繼續")
