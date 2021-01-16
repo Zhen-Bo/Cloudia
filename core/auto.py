@@ -5,7 +5,8 @@ from core.tool import tool
 
 class auto():
     def __init__(self, device, debug=False):
-        self.log = open('log-{0}.txt'.format(device), 'a')
+        port = device.split(":")[1]
+        self.log = open('log-{0}.txt'.format(port), 'a')
         self.line = "//================================================\n"
         self.ship_flag = False
         self.space_flag = False

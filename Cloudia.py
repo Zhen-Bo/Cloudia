@@ -1,6 +1,7 @@
 import sys
 import traceback
 import os
+__author__ = "Paver(Zhen_Bo)"
 
 # ============================================================================
 # 原始解析度 1920x1080

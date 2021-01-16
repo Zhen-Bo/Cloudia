@@ -19,6 +19,9 @@ def read_devices(path):
 
 def select_devices(path, devicesIds):
     os.system('cls')
+    print("\033[31mScrpit made by\033[0m \033[41;37mPaver\033[0m,github:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
+    print(
+        "\033[31m此腳本作者為\033[0m \033[41;37mPaver\033[0m,github頁面:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
     print("請選擇你要控制的設備:")
     i = 1
     for deviceId in devicesIds:
