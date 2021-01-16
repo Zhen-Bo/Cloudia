@@ -29,15 +29,17 @@ android5 版本的 bs 需要下載最新版的 BS 後,使用多開管理器新�
 
 ## 使用方法
 
+# 0.5 版本
+
 1.先去下載壓縮檔後解壓縮
 
 |--------重要部分--------|
 
 ### 2.然後到"再抽一次"的畫面
 
-![again_screen](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/example.jpg)
+![](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/example.jpg)
 
-是以"![again_btn](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/again.jpg)"為判斷基準
+是以"![](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/again.jpg)"為判斷基準
 
 補充:用夜神模擬器的使用者,你們好像要找到夜神專用的 nox_adb.exe,找到後複製一份出來重新命名成 adb.exe,然後覆蓋程式目錄下的 adb 資料夾中的 adb.exe
 
@@ -47,6 +49,30 @@ android5 版本的 bs 需要下載最新版的 BS 後,使用多開管理器新�
 
 ---
 
+# 0.6 版本
+
+1.下載源碼後解壓縮
+
+|--------重要部分--------|
+
+### 2.然後到"再抽一次"的畫面
+
+![](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/example.jpg)
+
+是以"![](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/again.jpg)"為判斷基準
+
+|-----------------------------|
+
+3.點擊 start.bat,確認目標設備是否有在選單,沒有的話可以自行添加(可以填入設備名稱,或是全數字的 port 號)
+
+- BS 多開的 port 號,可以去設定->偏好設定->往下拉到 ADB 勾選的那欄->下面黃字有寫說你可以在 127.0.0.1:多少連接,新增 port 號只需輸入":"後面的數字即可
+
+4.如果需要多開則可以再點擊一次 start.bat 並新增腳本工作
+
+- 示範影片:https://youtu.be/o6FgN0pgPgQ
+
+---
+
 ## 實際執行圖
 
-![example2](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/example2.png)
+![](https://github.com/Zhen-Bo/Cloudia/blob/master/example_image/example2.png)
