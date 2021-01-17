@@ -11,7 +11,7 @@ class adbKit():
         self.debug = debug
         self.capmuti = 1
         self.device = device
-        self.breakline = self.get_SDK()
+        self.breakline = self.get_SDK().encode('utf-8')
 
     def debug_get_write(self):
         t1 = time.time()
@@ -19,7 +19,7 @@ class adbKit():
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         image_bytes = pipe.stdout.read()
         print(image_bytes[0:10])
-        image_bytes = image_bytes.replace(b'\r\n', b'\n')
+        image_bytes = image_bytes.replace(self.breakline, b'\n')
         print(image_bytes[0:10])
         t2 = time.time()
         image = cv2.imdecode(np.frombuffer(
@@ -43,8 +43,7 @@ class adbKit():
         pipe = subprocess.Popen("{0}/adb/adb.exe -s {1} shell screencap -p".format(self.path, self.device),
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         image_bytes = pipe.stdout.read()
-        image_bytes = image_bytes.replace('{0}'.format(
-            self.breakline).encode(encoding="utf-8"), b'\n')
+        image_bytes = image_bytes.replace(self.breakline, b'\n')
         image = cv2.imdecode(np.frombuffer(
             image_bytes, dtype='uint8'), cv2.IMREAD_COLOR)
         if image.shape[0] != 1920 and image.shape[1] != 1080 and not raw:
@@ -77,17 +76,96 @@ class adbKit():
 
 
 class tool():
-    def __init__(self, device, debug=False) -> None:
+    def __init__(self, device, img_path=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images"), debug=False) -> None:
         self.debug = debug
         self.adbkit = adbKit(device)
         self.adbkit.capmuti = self.get_width_muti()
         self.screenshot = None
+        self.ark = self.get_ark(img_path)
+        self.template = self.load_template(img_path, self.ark)
 
     def get_width_muti(self):
         sample = self.adbkit.screenshots(raw=True)
         return sample.shape[0] / 1920
 
-    def compare(self, img_list, img_path, gaca=False, acc=0.85):
+    def get_ark(self, path):
+        arks = []
+        for img in os.listdir(path):
+            arks.append(img)
+        arks.remove("again.jpg")
+        choose = []
+        while True:
+            os.system('cls')
+            print(
+                "\033[31mScrpit made by\033[0m \033[41;37mPaver\033[0m,github:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
+            print(
+                "\033[31m此腳本作者為\033[0m \033[41;37mPaver\033[0m,github頁面:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
+            i = 1
+            print("目前候選名單: ", end='')
+            for ark in arks:
+                print("{0}.{1}    ".format(i, ark.split('.')[0]), end='')
+                i += 1
+            print("\n目前已選名單: ", end='')
+            j = 1
+            for ark in choose:
+                print("{0}.{1}    ".format(j, ark.split('.')[0]), end='')
+                j += 1
+            print("\n輸入a為全部添加,輸入e離開")
+            index = input("請輸入要鎖定的聖物編號: ")
+            try:
+                index = int(index)
+                if index > len(arks):
+                    print("超出最大編號")
+                    input("請按enter繼續選擇")
+                    continue
+                choose.append(arks[index-1])
+                arks.remove(arks[index-1])
+            except:
+                if index.lower() == 'a':
+                    for ark in arks:
+                        choose.append(ark)
+                    arks = []
+                elif index.lower() == 'e':
+                    print("\n目前已選名單: ", end='')
+                    j = 1
+                    for ark in choose:
+                        print("{0}.{1}    ".format(
+                            j, ark.split('.')[0]), end='')
+                        j += 1
+                    ctr = input("\n確定選擇請按enter,重新選擇請輸入'n': ")
+                    if str(ctr).lower() == 'n':
+                        return self.get_ark(path)
+                    else:
+                        return choose
+                else:
+                    continue
+            finally:
+                if len(arks) == 0:
+                    os.system('cls')
+                    print(
+                        "\033[31mScrpit made by\033[0m \033[41;37mPaver\033[0m,github:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
+                    print(
+                        "\033[31m此腳本作者為\033[0m \033[41;37mPaver\033[0m,github頁面:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
+                    print("\n目前已選名單: ", end='')
+                    j = 1
+                    for ark in choose:
+                        print("{0}.{1}    ".format(
+                            j, ark.split('.')[0]), end='')
+                        j += 1
+                    ctr = input("\n確定選擇請按enter,重新選擇請輸入'n': ")
+                    if str(ctr).lower() == 'n':
+                        return self.get_ark(path)
+                    else:
+                        return choose
+
+    def load_template(self, img_path, template_list):
+        imgs = []
+        for template in template_list:
+            img = os.path.join(img_path, template)
+            imgs.append(self.cv_read(img))
+        return imgs
+
+    def compare(self, img_list, gach=False, acc=0.85):
         imgs = []
         self.screenshot = self.adbkit.screenshots()
         for item in img_list:
@@ -105,32 +183,24 @@ class tool():
                     print("[Detect]acc rate:", round(reslist[1], 2))
                 pos = [reslist[3][0], reslist[3][1]]
                 pos = [x*self.adbkit.capmuti for x in pos]
-                if gaca == True:
-                    return pos, self.gatcha(img_path, self.screenshot)
+                if gach == True:
+                    return pos, self.gatcha()
                 else:
                     return pos
         return False
 
-    def gatcha(self, img_path, target_img):
+    def cv_read(self, file_path):
+        img = cv2.imdecode(np.fromfile(file_path, dtype=np.uint8), -1)
+        return img
+
+    def gatcha(self):
         gatcha = []
-        # 海
-        ship = cv2.imread("{0}/ship.jpg".format(img_path))
-        result = cv2.matchTemplate(target_img, ship, cv2.TM_CCOEFF_NORMED)
-        reslist = cv2.minMaxLoc(result)
-        if reslist[1] > 0.9:
-            gatcha.append("海盜船雷古尼斯號")
-        # 飛
-        space = cv2.imread("{0}/space.jpg".format(img_path))
-        result = cv2.matchTemplate(target_img, space, cv2.TM_CCOEFF_NORMED)
-        reslist = cv2.minMaxLoc(result)
-        if reslist[1] > 0.9:
-            gatcha.append("飛艇隆瓦裡歐號")
-        # 沙
-        sand = cv2.imread("{0}/sand.jpg".format(img_path))
-        result = cv2.matchTemplate(target_img, sand, cv2.TM_CCOEFF_NORMED)
-        reslist = cv2.minMaxLoc(result)
-        if reslist[1] > 0.9:
-            gatcha.append("超砂獸的靈帝牙")
+        for index in range(len(self.template)):
+            result = cv2.matchTemplate(
+                self.screenshot, self.template[index], cv2.TM_CCOEFF_NORMED)
+            result = cv2.minMaxLoc(result)
+            if result[1] > 0.9:
+                gatcha.append(self.ark[index])
         return gatcha
 
     def tap(self, pos, raw=False):

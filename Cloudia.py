@@ -12,7 +12,7 @@ try:
     from core import client
     path = os.path.dirname(os.path.abspath(__file__))
     device = client.get_devices(path)
-    bot = auto(device, debug=True)
+    bot = auto(device)
     bot.bot_start()
 except Exception as e:
     error_class = e.__class__.__name__

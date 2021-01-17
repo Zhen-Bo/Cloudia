@@ -4,8 +4,11 @@ from core.tool import tool
 
 
 class auto():
-    def __init__(self, device, debug=False):
-        port = device.split(":")[1]
+    def __init__(self, device):
+        try:
+            port = device.split(":")[1]
+        except:
+            port = device
         self.log = open('log-{0}.txt'.format(port), 'a')
         self.line = "//================================================\n"
         self.ship_flag = False
@@ -34,13 +37,13 @@ class auto():
         except:
             raise Exception("沒有偵測到\"再抽一次\",或是解析度不是9x16的解析度\n退出程式")
         time.sleep(0.5)
-        while len(POG) != 3:
+        while len(POG) != len(self.adbtool.ark):
             t_start = time.time()
             POG = []
             again = False
             while not again:
                 again = self.adbtool.compare(
-                    ["{0}/again.jpg".format(self.path)], self.path, gaca=True)
+                    ["{0}/again.jpg".format(self.path)], gach=True)
                 if not again:
                     self.adbtool.tap((960, 70))
             POG = again[1]
@@ -48,7 +51,7 @@ class auto():
             cost_time = round(t_end-t_start, 2)
             if self.times == 0:
                 self.times += 1
-            elif self.times != 0 and cost_time > 3:
+            elif self.times != 0 and cost_time > 5:
                 self.log_info("第{0}次結果:\n".format(self.times))
                 if len(POG) > 0:
                     self.log_info('命中數量: {0}\n'.format(len(POG)))
@@ -59,11 +62,11 @@ class auto():
                     self.log_info('命中數量: 0\n')
                 self.log_info("耗時 {0} 秒\n".format(cost_time))
                 self.log_info(self.line)
-                if len(POG) != 3:
+                if len(POG) != len(self.adbtool.ark):
                     self.adbtool.tap(again[0], raw=True)
                     time.sleep(1)
                     self.times += 1
-                elif len(POG) == 3:
+                elif len(POG) == len(self.adbtool.ark):
                     print("執行結束,總共執行 {0} 次".format(self.times))
                     input("請輸入enter繼續")
                     break
