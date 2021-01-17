@@ -1,5 +1,6 @@
 import os
 import time
+from datetime import datetime
 from core.tool import tool
 
 
@@ -18,6 +19,8 @@ class auto():
         self.path = os.path.dirname(
             os.path.dirname(os.path.abspath(__file__))) + "/images"
         self.adbtool = tool(device)
+        self.start = None
+        self.end = None
 
     def log_info(self, str):
         self.log.write(str)
@@ -25,13 +28,14 @@ class auto():
 
     def bot_start(self):
         self.log_info(self.line)
-        self.log_info("開始運行\n")
+        self.start = datetime.now()
+        self.log_info("開始運行,開始時間: {}\n".format(
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         self.log_info(self.line)
         POG = []
         again = False
         again = self.adbtool.compare(
             ["{0}/again.jpg".format(self.path)], self.path)
-        #again = util.standby("{0}/again.jpg".format(self.path), self.path)
         try:
             self.adbtool.tap(again, raw=True)
         except:
@@ -67,6 +71,8 @@ class auto():
                     time.sleep(1)
                     self.times += 1
                 elif len(POG) == len(self.adbtool.ark):
-                    print("執行結束,總共執行 {0} 次".format(self.times))
+                    self.end = datetime.now()
+                    print(
+                        "執行結束,總共執行 {0} 次, 結束時間 {1} ,共花費 {2} ".format(self.times, self.end, str(self.end-self.start)))
                     input("請輸入enter繼續")
                     break
