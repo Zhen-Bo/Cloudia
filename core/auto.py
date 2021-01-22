@@ -5,7 +5,7 @@ from core.tool import tool
 
 
 class auto():
-    def __init__(self, device):
+    def __init__(self, device, NOX=False):
         try:
             port = device.split(":")[1]
         except:
@@ -18,7 +18,7 @@ class auto():
         self.times = 0
         self.path = os.path.dirname(
             os.path.dirname(os.path.abspath(__file__))) + "/images"
-        self.adbtool = tool(device)
+        self.adbtool = tool(device, NOX)
         self.start = None
         self.end = None
 
@@ -27,11 +27,21 @@ class auto():
         print(str, end='')
 
     def bot_start(self):
+        os.system('cls')
+        print("\033[31mScrpit made by\033[0m \033[41;37mPaver\033[0m,github:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
+        print(
+            "\033[31m此腳本作者為\033[0m \033[41;37mPaver\033[0m,github頁面:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
         self.log_info(self.line)
         self.start = datetime.now()
         self.log_info("開始運行,開始時間: {}\n".format(
             datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-        self.log_info(self.line)
+        print("已鎖定:", end='')
+        i = 0
+        for ark in self.adbtool.ark:
+            print("\033[1;{0}m{1}\033[0m\t".format(
+                33+i, ark.split('.')[0]), end='')
+            i += 1
+        self.log_info("\n{}".format(self.line))
         POG = []
         again = False
         again = self.adbtool.compare(
@@ -60,7 +70,8 @@ class auto():
                 if len(POG) > 0:
                     self.log_info('命中數量: {0}\n'.format(len(POG)))
                     for i in range(len(POG)):
-                        self.log_info("{0}.{1}\t".format(i+1, POG[i]))
+                        self.log_info("{0}.{1}\t".format(
+                            i+1, POG[i].split('.')[0]))
                     self.log_info('\n')
                 else:
                     self.log_info('命中數量: 0\n')

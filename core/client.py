@@ -2,9 +2,13 @@ import subprocess
 import os
 
 
-def read_devices(path):
-    devices = subprocess.Popen("{0}/adb/adb.exe devices".format(path),
-                               shell=True, stdout=subprocess.PIPE).stdout.read().decode("utf-8")
+def read_devices(path, NOX=False):
+    if NOX:
+        adb_path = "{}/adb/nox/nox_adb.exe".format(path)
+    else:
+        adb_path = "{}/adb/adb.exe".format(path)
+    devices = subprocess.Popen("{0} devices".format(
+        adb_path), shell=True, stdout=subprocess.PIPE).stdout.read().decode("utf-8")
     lists = devices.split("\n")
     devicesNames = []
     for item in lists:
@@ -17,7 +21,11 @@ def read_devices(path):
     return devicesNames
 
 
-def select_devices(path, devicesIds):
+def select_devices(path, devicesIds, NOX=False):
+    if NOX:
+        adb_path = "{}/adb/nox/nox_adb.exe".format(path)
+    else:
+        adb_path = "{}/adb/adb.exe".format(path)
     os.system('cls')
     print("\033[31mScrpit made by\033[0m \033[41;37mPaver\033[0m,github:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
     print(
@@ -44,12 +52,11 @@ def select_devices(path, devicesIds):
         elif "a" == inputIndex.lower():
             port = input("請輸入設備名稱或連接在127.0.0.1的port: ")
             if port.isdigit():
-                os.system(
-                    "{0}/adb/adb.exe connect 127.0.0.1:{1}".format(path, port))
+                os.system("{0} connect 127.0.0.1:{1}".format(adb_path, port))
             else:
-                os.system("{0}/adb/adb.exe connect {1}".format(path, port))
+                os.system("{0} connect {1}".format(adb_path, port))
             input("輸入enter繼續")
-            return select_devices(path, read_devices(path))
+            return select_devices(path, read_devices(path), NOX)
         else:
             print(
                 "\033[1;31m編號輸入錯誤,請在試一次\033[0m")
@@ -57,9 +64,9 @@ def select_devices(path, devicesIds):
             return select_devices(path, devicesIds)
 
 
-def get_devices(path):
-    devices = read_devices(path)
-    client = select_devices(path, devices)
+def get_devices(path, NOX=False):
+    devices = read_devices(path, NOX)
+    client = select_devices(path, devices, NOX)
     if client == -1:
         raise Exception("使用者終止")
     return client

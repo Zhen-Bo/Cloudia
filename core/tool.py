@@ -6,16 +6,20 @@ import time
 
 
 class adbKit():
-    def __init__(self, device, debug=False) -> None:
+    def __init__(self, device, NOX=False, debug=False) -> None:
         self.path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.debug = debug
         self.capmuti = 1
         self.device = device
+        if NOX:
+            self.adb_path = "{}/adb/nox/nox_adb.exe".format(self.path)
+        else:
+            self.adb_path = "{}/adb/adb.exe".format(self.path)
         self.breakline = self.get_SDK().encode('utf-8')
 
     def debug_get_write(self):
         t1 = time.time()
-        pipe = subprocess.Popen("{0}/adb/adb.exe -s {1} shell screencap -p".format(self.path, self.device),
+        pipe = subprocess.Popen("{0} -s {1} shell screencap -p".format(self.adb_path, self.device),
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         image_bytes = pipe.stdout.read()
         print(image_bytes[0:10])
@@ -29,8 +33,8 @@ class adbKit():
         input("按Enter鍵關閉視窗")
 
     def get_SDK(self):
-        SDK_version = subprocess.Popen("{0}/adb/adb.exe -s {1} shell getprop ro.build.version.release".format(
-            self.path, self.device), stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+        SDK_version = subprocess.Popen("{0} -s {1} shell getprop ro.build.version.release".format(
+            self.adb_path, self.device), stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         SDK_version = SDK_version.stdout.read().decode("utf-8")
         if int(SDK_version[0]) >= 7:
             return '\r\n'
@@ -40,7 +44,7 @@ class adbKit():
             print("不是android5或android7")
 
     def screenshots(self, raw=False):
-        pipe = subprocess.Popen("{0}/adb/adb.exe -s {1} shell screencap -p".format(self.path, self.device),
+        pipe = subprocess.Popen("{0} -s {1} shell screencap -p".format(self.adb_path, self.device),
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         image_bytes = pipe.stdout.read()
         image_bytes = image_bytes.replace(self.breakline, b'\n')
@@ -64,11 +68,11 @@ class adbKit():
         if self.debug:
             print('[ADB]adb shell input tap ' + Px + ' ' + Py)
         os.system(
-            '{0}/adb/adb.exe -s {1} shell input tap {2} {3}'.format(self.path, self.device, Px, Py))
+            '{0} -s {1} shell input tap {2} {3}'.format(self.adb_path, self.device, Px, Py))
 
     def swipe(self, x1, y1, x2, y2, delay):
-        cmdSwipe = '{0}/adb/adb.exe -s {1} shell input swipe {2} {3} {4} {5} {6}'.format(
-            self.path, self.device, int(x1), int(y1), int(x2), int(y2), int(delay*1000))
+        cmdSwipe = '{0} -s {1} shell input swipe {2} {3} {4} {5} {6}'.format(
+            self.adb_path, self.device, int(x1), int(y1), int(x2), int(y2), int(delay*1000))
         if self.debug:
             print('[ADB]adb shell swipe from X:{0} Y:{1} to X:{2} Y:{3} Delay:{4}'.format(
                 int(x1), int(y1), int(x2), int(y2), int(delay*1000)))
@@ -76,9 +80,9 @@ class adbKit():
 
 
 class tool():
-    def __init__(self, device, img_path=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images"), debug=False) -> None:
+    def __init__(self, device, NOX, img_path=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images"), debug=False) -> None:
         self.debug = debug
-        self.adbkit = adbKit(device)
+        self.adbkit = adbKit(device, NOX)
         self.adbkit.capmuti = self.get_width_muti()
         self.screenshot = None
         self.ark = self.get_ark(img_path)
@@ -126,6 +130,11 @@ class tool():
                         choose.append(ark)
                     arks = []
                 elif index.lower() == 'e':
+                    os.system('cls')
+                    print(
+                        "\033[31mScrpit made by\033[0m \033[41;37mPaver\033[0m,github:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
+                    print(
+                        "\033[31m此腳本作者為\033[0m \033[41;37mPaver\033[0m,github頁面:\033[37;34mhttps://github.com/Zhen-Bo\033[0m")
                     print("\n目前已選名單: ", end='')
                     j = 1
                     for ark in choose:
